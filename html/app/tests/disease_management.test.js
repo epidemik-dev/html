@@ -1,18 +1,22 @@
 
-var manager = new DiseaseManager();
+var manager = new DiseaseBranch(-180, 180, -360, 360);
 
-manager.addDisease(1, 1);
-/*manager.addDisease(2, 3);
-manager.addDisease(100, 1);
-manager.addDisease(-10, 20);
-manager.addDisease(-10, 50);
-manager.addDisease(20, -100);
-manager.addDisease(0, 0);*/
+manager = addDisease(manager, 1, 1);
+manager = addDisease(manager, 2, 3);
+manager = addDisease(manager, 100, 1);
+manager = addDisease(manager, -10, 20);
+manager = addDisease(manager, -10, 50);
+manager = addDisease(manager, 20, -100);
+manager = addDisease(manager, 0, 0);
+
 console.log(manager);
 
-expect(manager.getAll(), 6, "Get every disease");
+expect(getAll(manager), 7, "Get every disease");
 
-expect(manager.getWeightForRange(-1000, 1000, -1000, 1000), 6, "Get every disease by range");
+expect(getWeightForRange(manager, -1000, 1000, -1000, 1000), 7, "Get every disease by range");
+expect(getWeightForRange(manager, -0.1, 10, -0.1, 10), 3, "Get every disease by range");
+expect(getWeightForRange(manager, -10, 10, -0.1, 40), 4, "Get every disease by range");
+
 
 function expect(a, b, title) {
   var html_element = document.getElementById('test_output');

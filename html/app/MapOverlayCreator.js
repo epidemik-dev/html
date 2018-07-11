@@ -4,16 +4,43 @@
  * and open the template in the editor.
  */
 /* global google */
+
+// A Branch is one OF
+// - DiseaseBranch
+// - DiseaseLeaf
+
+class DiseaseBranch {
+
+    constructor(latMin, latMax, longMin, longMax) {
+        this.latMin = latMin
+        this.latMax = latMax
+        this.longMin = longMin
+        this.longMax = longMax
+
+        this.latWidth = (this.latMax - this.latMin)
+        this.longWidth = (this.longMax - this.longMin)
+
+        this.numDiseases = 0;
+    }
+
+    initSubbranches() {
+        this.topLeft = new DiseaseBranch(this.latMin, this.latMin + this.latWidth / 2, this.longMin + this.longWidth / 2, this.longMax);
+        this.topRight = new DiseaseBranch(this.latMin + this.latWidth / 2, this.latMax, this.longMin + this.longWidth / 2, this.longMax);
+        this.bottomLeft = new DiseaseBranch(this.latMin, this.latMin + this.latWidth / 2, this.longMin, this.longMin + this.longWidth / 2);
+        this.bottomRight = new DiseaseBranch(this.latMin + this.latWidth / 2, this.latMax, this.longMin, this.longMin + this.longWidth / 2);
+    }
+
+}
+
 var splits;
-var diseases = [];
-var numXY = 20;
-var latLongDisease;
+var branch = new DiseaseBranch(-360, 360, -360, 360);
+var numXY = 300;
 var allRects = [];
-var lastTime = -100;
-var hasLoaded = false;
 
 var lastCenter = null;
 var lastZoom = null;
+var hasLoadedData = false;
+var hasLoadedMap = false;
 
 
 // Map -> Void
@@ -21,10 +48,15 @@ var lastZoom = null;
 function getData(map) {
     // Sending and receiving data in JSON format using POST method
     var URL = "http://localhost:3000/diseases"
-    network_get_all_diseases(localStorage['token'], function(response) {
+    network_get_all_diseases(localStorage['token'], function (response) {
         diseases = response;
+        for (var i in diseases) {
+            var data = diseases[i];
+            branch = addDisease(branch, data.latitude, data.longitude);
+        }
+        hasLoadedData = true;
         addOverlays(map);
-    }, function(xhr) {
+    }, function (xhr) {
         displayLogin();
     });
 }
@@ -32,89 +64,63 @@ function getData(map) {
 // Map -> Void
 // Adds the overlays to the map
 function addOverlays(map) {
-    var time = lastTime
-    var seconds = new Date().getTime() / 1000;
-    lastTime = seconds
     var curCenter = map.getCenter();
     var curZoom = map.getZoom();
-    if((lastZoom != null && lastZoom != curZoom) || (lastCenter != null && Math.abs(curCenter.lat() - lastCenter.lat()) < 0.01) 
-        || (lastCenter != null && Math.abs(curCenter.lng() - lastCenter.lng()) < 0.01)) {
-            return;
+    console.log(hasLoadedData, hasLoadedMap, lastZoom, curZoom, lastZoom === curZoom);
+    if ((!hasLoadedData && !hasLoadedMap) || (lastZoom !== null || lastZoom === curZoom)) {
+        return;
     }
     lastZoom = curZoom;
     lastCenter = curCenter;
-    var bounds = map.getBounds();
-    if(bounds === undefined) {
-        return;
-    }
-    var ne = bounds.getNorthEast(); // LatLng of the north-east corner
-    var sw = bounds.getSouthWest(); // LatLng of the south-west corder
-    var startLat = sw.lat();
-    var startLong = sw.lng();
-    var averageIntensity = 1.0;
-    var latWidth = Math.abs(sw.lat() - ne.lat());
-    var longWidth = Math.abs(sw.lng() - ne.lng());
-    //map.removeOverlays(map.overlays)
-    this.latLongDisease = [[]];
-    for (var i = 0; i < 100; i++) {
-        this.latLongDisease.push([]);
-        for (var i2 = 0; i2 < 100; i2++) {
-            this.latLongDisease[i].push("");
-        }
-    }
-    var realPointCounts = 1.0;
+
+    var startLat = -180
+    var startLong = -360
+    var latWidth = 360
+    var longWidth = 720
     var intervalLat = latWidth / numXY;
     var intervalLong = longWidth / numXY;
-    for (const i in diseases) {
-        var data = diseases[i];
-        var deltaLat = data.latitude - startLat;
-        let deltaLong = data.longitude - startLong;
-        if (deltaLong > 0 && deltaLat > 0 && deltaLat < latWidth && deltaLong < longWidth) {
-            var posnLat = (Math.floor(deltaLat / (latWidth / numXY)));
-            var posnLong = (Math.floor(deltaLong / (longWidth / numXY)));
-            var realLat = (posnLat) * intervalLat + startLat;
-            var realLong = (posnLong) * intervalLong + startLong;
-            var scaleLat = latWidth / numXY;
-            var scaleLong = longWidth / numXY;
-            var bounds = {
-                north: realLat + scaleLat,
-                south: realLat,
-                east: realLong + scaleLong,
-                west: realLong
-            };
-            if (posnLat >= this.latLongDisease.length || posnLong >= this.latLongDisease[posnLat].length) {
-                continue;
-            }
-            if (this.latLongDisease[posnLat][posnLong] === "") {
-                this.latLongDisease[posnLat][posnLong] = new DiseasePolygon(bounds, 0);
+    var diseasePolys = [];
+
+    var realPointCounts = 1.0;
+    var averageIntensity = 1.0;
+    for (var i = 0; i < numXY; i++) {
+        for (var i2 = 0; i2 < numXY; i2++) {
+            var latMin = startLat + i * intervalLat;
+            var latMax = startLat + (i + 1) * intervalLat;
+            var longMin = startLong + i2 * intervalLong;
+            var longMax = startLong + (i2 + 1) * intervalLong;
+            var numDiseases = getWeightForRange(branch, latMin, latMax, longMin, longMax);
+            if (numDiseases !== 0) {
+                var bounds = {
+                    north: latMax,
+                    south: latMin,
+                    east: longMax,
+                    west: longMin
+                }
+                diseasePolys.push(new DiseasePolygon(bounds, numDiseases));
                 realPointCounts += 1;
+                averageIntensity += numDiseases;
             }
-            averageIntensity += 1;
-            this.latLongDisease[posnLat][posnLong].addIntensity();
         }
     }
     averageIntensity /= realPointCounts;
     map.totalOverlays = (realPointCounts);
     clearOverlays(map);
-    for (const x in this.latLongDisease) {
-        for (const y in this.latLongDisease[x]) {
-            if (this.latLongDisease[x][y] !== "") {
-                var power = (this.latLongDisease[x][y].intensity / averageIntensity);
-                var toAdd = new google.maps.Rectangle({
-                    bounds: this.latLongDisease[x][y].bounds,
-                    editable: false,
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 2 / 4 * power,
-                    strokeWeight: 2,
-                    fillColor: '#FF0000',
-                    fillOpacity: 1 / 4 * power,
-                    map: this.map
-                });
-                this.allRects.push(toAdd);
-            }
-        }
+    for (var i in diseasePolys) {
+        var power = (diseasePolys[i].intensity / averageIntensity);
+        var toAdd = new google.maps.Rectangle({
+            bounds: diseasePolys[i].bounds,
+            editable: false,
+            strokeColor: '#FF0000',
+            strokeOpacity: 2 / 4 * power,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 1 / 4 * power,
+            map: this.map
+        });
+        this.allRects.push(toAdd);
     }
-    hasLoaded = true;
+    hasLoadedMap = true;
 }
 
 // Map -> Void
@@ -126,26 +132,42 @@ function clearOverlays(map) {
         }
     }
 }
-/*
-var corner;
+
+var errorBound = 0.005;
+
 
 // Branch Number Number Number Number -> Void
 //Returns the count of all the disease points in this range
 function getWeightForRange(branch, curLatMin, curLatMax, curLongMin, curLongMax) {
-    return this.corner.getWeightForRange(curLatMin, curLatMax, curLongMin, curLongMax);
+    if (!rangeIsInRange(branch, curLatMin, curLatMax, curLongMin, curLongMax)) {
+        return 0;
+    } else if (branch.topLeft === undefined) {
+        return branch.numDiseases;
+    } else {
+        return getWeightForRange(branch.topLeft, curLatMin, curLatMax, curLongMin, curLongMax) +
+            getWeightForRange(branch.topRight, curLatMin, curLatMax, curLongMin, curLongMax) +
+            getWeightForRange(branch.bottomLeft, curLatMin, curLatMax, curLongMin, curLongMax) +
+            getWeightForRange(branch.bottomRight, curLatMin, curLatMax, curLongMin, curLongMax);
+    }
 }
 
 // Branch Number Number -> Branch
 //Adds this disease point to the data structure
 function addDisease(branch, lat, long) {
-    if (isInRange(this.corner, lat, long)) {
-        if(branch.numDiseases == undefined) {
-            branch.topLeft = branch.topLeft.addDisease(lat, long);
-            branch.topRight = branch.topRight.addDisease(lat, long);
-            branch.bottomLeft = branch.bottomLeft.addDisease(lat, long);
-            branch.bottomRight = branch.bottomRight.addDisease(lat, long);
-        } else {
-            branch.numDiseases += 1;
+    if (isSmallBranch(branch)) {
+        branch.numDiseases += 1;
+    } else {
+        if (branch.topLeft === undefined) {
+            branch.initSubbranches();
+        }
+        if (isInRange(branch.topLeft, lat, long)) {
+            branch.topLeft = addDisease(branch.topLeft, lat, long);
+        } else if (isInRange(branch.topRight, lat, long)) {
+            branch.topRight = addDisease(branch.topRight, lat, long);
+        } else if (isInRange(branch.bottomLeft, lat, long)) {
+            branch.bottomLeft = addDisease(branch.bottomLeft, lat, long);
+        } else if (isInRange(branch.bottomRight, lat, long)) {
+            branch.bottomRight = addDisease(branch.bottomRight, lat, long);
         }
     }
     return branch;
@@ -154,7 +176,22 @@ function addDisease(branch, lat, long) {
 // Branch -> Int
 // Returns the count of every disease stored in the system
 function getAll(branch) {
-    return this.corner.getAll()
+    if (branch === undefined) {
+        return 0;
+    } else if (branch.topLeft === undefined) {
+        return branch.numDiseases;
+    } else {
+        return getAll(branch.topLeft) +
+            getAll(branch.topRight) +
+            getAll(branch.bottomLeft) +
+            getAll(branch.bottomRight);
+    }
+}
+
+// Branch -> Boolean
+// Returns if the branch's range is in the error bound
+function isSmallBranch(branch) {
+    return branch.latMax - branch.latMin < errorBound && branch.longMax - branch.longMin < errorBound
 }
 
 // Branch Number Number -> Boolean
@@ -163,35 +200,8 @@ function isInRange(diseaseItem, lat, long) {
     return lat >= diseaseItem.latMin && lat <= diseaseItem.latMax && long >= diseaseItem.longMin && long <= diseaseItem.longMax;
 }
 
-
-// A Branch is one OF
-// - DiseaseBranch
-// - DiseaseLeaf
-
-class DiseaseBranch {
-
-    constructor(latMin, latMax, longMin, longMax, topLeft, topRight, bottomLeft, bottomRight) {
-        this.latMin = latMin
-        this.latMax = latMax
-        this.longMin = longMin
-        this.longMax = longMax
-        this.topLeft = topLeft
-        this.topRight = topRight
-        this.bottomLeft = bottomLeft
-        this.bottomRight = bottomRight
-    }
-
+// Branch Number Number Number Number -> Boolean
+// Says whether this range overlaps at all with the other range
+function rangeIsInRange(branch, latMin, latMax, longMin, longMax) {
+    return latMin <= branch.latMax && latMax >= branch.latMin && longMin <= branch.longMax && longMax >= branch.longMin;
 }
-
-class DiseaseLeaf {
-
-    constructor(latMin, latMax, longMin, longMax, numDiseases) {
-        this.latMin = latMin
-        this.latMax = latMax
-        this.longMin = longMin
-        this.longMax = longMax
-        this.numDiseases = numDiseases;
-    }
-
-}
-*/
