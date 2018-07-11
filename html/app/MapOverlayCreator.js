@@ -126,3 +126,72 @@ function clearOverlays(map) {
         }
     }
 }
+/*
+var corner;
+
+// Branch Number Number Number Number -> Void
+//Returns the count of all the disease points in this range
+function getWeightForRange(branch, curLatMin, curLatMax, curLongMin, curLongMax) {
+    return this.corner.getWeightForRange(curLatMin, curLatMax, curLongMin, curLongMax);
+}
+
+// Branch Number Number -> Branch
+//Adds this disease point to the data structure
+function addDisease(branch, lat, long) {
+    if (isInRange(this.corner, lat, long)) {
+        if(branch.numDiseases == undefined) {
+            branch.topLeft = branch.topLeft.addDisease(lat, long);
+            branch.topRight = branch.topRight.addDisease(lat, long);
+            branch.bottomLeft = branch.bottomLeft.addDisease(lat, long);
+            branch.bottomRight = branch.bottomRight.addDisease(lat, long);
+        } else {
+            branch.numDiseases += 1;
+        }
+    }
+    return branch;
+}
+
+// Branch -> Int
+// Returns the count of every disease stored in the system
+function getAll(branch) {
+    return this.corner.getAll()
+}
+
+// Branch Number Number -> Boolean
+// Says if the branch is in range
+function isInRange(diseaseItem, lat, long) {
+    return lat >= diseaseItem.latMin && lat <= diseaseItem.latMax && long >= diseaseItem.longMin && long <= diseaseItem.longMax;
+}
+
+
+// A Branch is one OF
+// - DiseaseBranch
+// - DiseaseLeaf
+
+class DiseaseBranch {
+
+    constructor(latMin, latMax, longMin, longMax, topLeft, topRight, bottomLeft, bottomRight) {
+        this.latMin = latMin
+        this.latMax = latMax
+        this.longMin = longMin
+        this.longMax = longMax
+        this.topLeft = topLeft
+        this.topRight = topRight
+        this.bottomLeft = bottomLeft
+        this.bottomRight = bottomRight
+    }
+
+}
+
+class DiseaseLeaf {
+
+    constructor(latMin, latMax, longMin, longMax, numDiseases) {
+        this.latMin = latMin
+        this.latMax = latMax
+        this.longMin = longMin
+        this.longMax = longMax
+        this.numDiseases = numDiseases;
+    }
+
+}
+*/

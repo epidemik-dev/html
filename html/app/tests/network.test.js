@@ -37,7 +37,7 @@ function test_report_sick(functions) {
     expect(predict_disease, "Common Cold", "Testing Disease Reporting");
     functions.pop()(functions);
   }, function (error) {
-    expect(1, 2, "Testing Login")
+    expect(1, 2, "Testing report sick")
     throw error;
   })
 }
