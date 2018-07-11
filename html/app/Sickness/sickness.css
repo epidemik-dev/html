@@ -1,0 +1,124 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 7, 2018, 12:49:02 PM
+    Author     : ryan_bradford
+*/
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.back {
+    background-color: #f44336;
+}
+
+.ButtonHolder {
+    margin-left: 30%;
+    margin-right: 30%;
+}
+
+.SelectorTitle {
+    margin-left: 25%;
+    align-self: center;
+    width: 50%;
+}
+
+.selector {
+    margin: auto;
+    background-color: #f1f1f1;
+    width: 20%;
+}
+
+.disease_selector {
+    width: 50%;
+    margin-left: 25%;
+    align-self: center;
+}
+
+.checkbox > input[type=checkbox] {
+    visibility: hidden;
+}
+
+hr {
+   border: none;
+   border-top: 1px solid #2E2E2E;
+   border-bottom: 1px solid #555;
+}
+
+.checkbox {
+   position: relative;
+   display: block;
+   width: 80px;
+   height: 26px;
+   margin: 0 auto;
+   background: #FFF;
+   border: 1px solid #2E2E2E;
+   border-radius: 2px;
+   -webkit-border-radius: 2px;
+   -moz-border-radius: 2px;
+}
+
+.checkbox-label {
+   position: relative;
+   width: 160px;
+   height: 26px;
+   text-align: center;
+   margin: 0 auto;
+   background: #FFF;
+}
+
+.checkbox:after {
+   position: absolute;
+   display: inline;
+   right: 10px;
+   content: 'no';
+   color: #E53935;
+   font: 12px/26px Arial, sans-serif;
+   font-weight: bold;
+   text-transform: capitalize;
+   z-index: 0;
+}
+
+.checkbox:before {
+   position: absolute;
+   display: inline;
+   left: 10px;
+   content: 'yes';
+   color: #43A047;
+   font: 12px/26px Arial, sans-serif;
+   font-weight: bold;
+   text-transform: capitalize;
+   z-index: 0;
+}
+
+.checkbox label {
+   position: absolute;
+   display: block;
+   top: 3px;
+   left: 3px;
+   width: 34px;
+   height: 20px;
+   background: #2E2E2E;
+   cursor: pointer;
+   transition: all 0.5s linear;
+   -webkit-transition: all 0.5s linear;
+   -moz-transition: all 0.5s linear;
+   border-radius: 2px;
+   -webkit-border-radius: 2px;
+   -moz-border-radius: 2px;
+   z-index: 1;
+}
+
+.checkbox input[type=checkbox]:checked + label {
+   left: 43px;
+}

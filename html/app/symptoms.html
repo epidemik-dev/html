@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <link rel="stylesheet" href="Sickness/sickness.css" type="text/css"/>
+        <title>Select Your Symptoms</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div class = "ButtonHolder">  
+            <button onclick = "send_sickness()" class = "submit">Submit</button>
+        </div>
+
+        <div id="symSelector">
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="./network_api/NetworkAPI.js"></script>
+        <script src = "Sickness/SymptomsList.js"></script>
+        <script src = "Sickness/SendSickness.js"></script>
+        <script>loadSymptomsToScreen()</script>
+    </body>
+</html>

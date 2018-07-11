@@ -1,0 +1,106 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 3, 2018, 3:02:41 PM
+    Author     : ryan_bradford
+*/
+
+#map {
+    height: 100%;
+    width: 100%;
+    border: 0;
+    position: absolute
+}
+
+.healthy {   
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 17px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15%;
+    height: 7.5%;
+    top: 10px;
+    left: 42.5%;
+    position: absolute;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.healthy span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.healthy span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.healthy:hover span {
+  padding-right: 25px;
+}
+
+.healthy:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.trendsButton {   
+    border: none;
+    display: inline-block;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 4%;
+    height: 8%;
+    left: 0%;
+    top: 0px;
+    position: relative;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+#trendsView { 
+    position: relative; 
+    border: 0px solid green; 
+    background: #4CAF50; 
+    width: 0px; 
+    height: 50%;
+    overflow: auto;
+    white-space: normal;
+
+}
+
+#trend {
+    width: 90%;
+    left: 5%;
+    top: 10px;
+    background: #4CAF50; 
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    position: relative;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
