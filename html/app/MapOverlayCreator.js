@@ -66,7 +66,6 @@ function getData(map) {
 function addOverlays(map) {
     var curCenter = map.getCenter();
     var curZoom = map.getZoom();
-    console.log(hasLoadedData, hasLoadedMap, lastZoom, curZoom, lastZoom === curZoom);
     if ((!hasLoadedData && !hasLoadedMap) || (lastZoom !== null || lastZoom === curZoom)) {
         return;
     }

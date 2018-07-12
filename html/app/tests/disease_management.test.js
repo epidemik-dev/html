@@ -9,8 +9,6 @@ manager = addDisease(manager, -10, 50);
 manager = addDisease(manager, 20, -100);
 manager = addDisease(manager, 0, 0);
 
-console.log(manager);
-
 expect(getAll(manager), 7, "Get every disease");
 
 expect(getWeightForRange(manager, -1000, 1000, -1000, 1000), 7, "Get every disease by range");
