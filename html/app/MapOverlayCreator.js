@@ -34,10 +34,8 @@ class DiseaseBranch {
 
 var splits;
 var branch = new DiseaseBranch(-360, 360, -360, 360);
-var numXY = 300;
 var allRects = [];
 
-var lastCenter = null;
 var lastZoom = null;
 var hasLoadedData = false;
 var hasLoadedMap = false;
@@ -64,25 +62,33 @@ function getData(map) {
 // Map -> Void
 // Adds the overlays to the map
 function addOverlays(map) {
-    var curCenter = map.getCenter();
     var curZoom = map.getZoom();
-    console.log(hasLoadedData, hasLoadedMap, lastZoom, curZoom, lastZoom === curZoom);
-    if ((!hasLoadedData && !hasLoadedMap) || (lastZoom !== null || lastZoom === curZoom)) {
+    console.log((!hasLoadedData && !hasLoadedMap) || (lastZoom !== null || lastZoom === curZoom), hasLoadedData, hasLoadedMap, lastZoom, curZoom, lastZoom === curZoom);
+    if ((!hasLoadedData && !hasLoadedMap) || (lastZoom !== null && lastZoom === curZoom)) {
         return;
     }
     lastZoom = curZoom;
-    lastCenter = curCenter;
 
-    var startLat = -180
-    var startLong = -360
-    var latWidth = 360
-    var longWidth = 720
+    var numXY = 100;
+    var curCenter = map.getBounds();
+    var startLat = curCenter.getSouthWest().lat();
+    var startLong = curCenter.getSouthWest().lng();
+    var endLat = curCenter.getNorthEast().lat();
+    var endLong = curCenter.getNorthEast().lng();
+    var latWidth = endLat - startLat;
+    var longWidth = endLong - startLong;
+    startLat -= latWidth;
+    startLong -= longWidth;
+    endLat += latWidth;
+    endLong += longWidth;
+    latWidth = endLat - startLat;
+    longWidth = endLong - startLong;
     var intervalLat = latWidth / numXY;
     var intervalLong = longWidth / numXY;
     var diseasePolys = [];
-
     var realPointCounts = 1.0;
     var averageIntensity = 1.0;
+    console.log(startLat, startLong, endLat, endLong, latWidth, longWidth);
     for (var i = 0; i < numXY; i++) {
         for (var i2 = 0; i2 < numXY; i2++) {
             var latMin = startLat + i * intervalLat;
