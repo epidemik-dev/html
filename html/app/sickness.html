@@ -15,26 +15,18 @@ and open the template in the editor.
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script src="./network_api/NetworkAPI.js"></script>
-        <script src="Sickness/SendSickness.js"></script>
         <div class = "ButtonHolder">  
             <button onclick = "go_back()" class = "back" >Back</button>
             <button onclick = "go_to_symptoms()" class = "submit">Next</button>
         </div>
         <div class = "selector">
             <B class = "SelectorTitle" >Select Your Sickness</B> <BR>
-            <select class = "disease_selector" id = "disease_selector">
-                <option value="Common Cold">Common Cold</option>
-                <option value="Influenza (Flu)">Influenza (Flu)</option>
-                <option value="Strep Throat">Strep Throat</option>
-                <option value="Gastroenteritis (Stomach Flu)">Gastroenteritis (Stomach Flu)</option>
-                <option value="Staph Infection">Staph Infection</option>
-                <option value="Lyme Disease">Lyme Disease</option>
-                <option value="Tuberculosis">Tuberculosis</option>
-                <option value="Hand Foot and Mouth">Hand Foot and Mouth</option>
-                <option value="Pink Eye">Pink Eye</option>
-                <option value="Other">Other</option>
-               
+            
+            <select class = "disease_selector" id = "disease_selector">               
             </select>
         </div>
+        <script src="Sickness/SendSickness.js"></script>
+        <script src="Sickness/LoadDiagnosis.js"></script>
+        <script>loadDiseases();</script>
     </body>
 </html>

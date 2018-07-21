@@ -126,3 +126,18 @@ function network_report_healthy(username, auth_token, sucess, failure) {
         error: failure
     });
 }
+
+// String (JSON -> Void) (Error -> Void) -> Void
+// Loads the data used to diagnose users
+function network_load_diagnosis(auth_token, sucess, failure) {
+    var URL = main_url + "/diseases/symptoms" + version_extension + 
+             "&auth_token=" + auth_token
+    $.ajax({
+        method: "GET",
+        contentType: 'application/json',
+        dataType: 'json',
+        url: URL,
+        success: sucess,
+        error: failure
+    });
+}
