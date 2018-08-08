@@ -1,5 +1,5 @@
-var main_url = "https://epidemik.us/api"
-//var main_url = "http://localhost:3000"
+//var main_url = "https://epidemik.us/api"
+var main_url = "http://localhost:3000"
 var version_extension = "?version=1.0"
 
 
@@ -56,7 +56,7 @@ function network_get_status(username, auth_token, sucess, failure) {
     });
 }
 
-// String String DateString [List-of Number] String (String -> Void) (Error -> Void) -> Void
+// String String DateString [List-of Number] String (Void -> Void) (Error -> Void) -> Void
 // Marks this user as sick
 function network_report_sick(username, disease_name, symptoms, auth_token, sucess, failure) {
     var date = new Date().toISOString().split("T")[0];

@@ -33,8 +33,8 @@ function test_get_status(functions) {
 }
 
 function test_report_sick(functions) {
-  network_report_sick(username_base, "Common Cold", [4], auth_token, function (predict_disease) {
-    expect(predict_disease, "Common Cold", "Testing Disease Reporting");
+  network_report_sick(username_base, "Common Cold", [1,2,3,4], auth_token, function () {
+    expect(1, 1, "Testing Disease Reporting");
     functions.pop()(functions);
   }, function (error) {
     expect(1, 2, "Testing report sick")
