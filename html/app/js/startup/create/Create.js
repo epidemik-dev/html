@@ -117,6 +117,8 @@ export var CreatePage = function (_React$Component) {
       } else if (this.state.stage === 4) {
         return this.getBody(this.addressSelector);
       } else if (this.state.stage === 5) {
+        document.getElementsByName("street")[0].value = "";
+        document.getElementsByName("city")[0].value = "";
         return this.getBody(this.usernameSelector);
       }
     }

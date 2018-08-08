@@ -23,6 +23,8 @@ export class CreatePage extends React.Component {
     } else if (this.state.stage === 4) {
       return this.getBody(this.addressSelector);
     } else if (this.state.stage === 5) {
+      document.getElementsByName("street")[0].value = ""
+      document.getElementsByName("city")[0].value = ""
       return this.getBody(this.usernameSelector);
     }
   }
@@ -41,21 +43,21 @@ export class CreatePage extends React.Component {
         const username = document.getElementsByName("uname")[0].value;
         const latitude = cur.state.latitude
         const longitude = cur.state.longitude
-        if(password.length < 6 || password === "password") {
-            cur.setState({stage: 5, warning: "Password too short", latitude: latitude, longitude: longitude})
-            return;
-        } 
+        if (password.length < 6 || password === "password") {
+          cur.setState({stage: 5, warning: "Password too short", latitude: latitude, longitude: longitude})
+          return;
+        }
         NetworkAPI.network_create_an_account(username, password, latitude, longitude, "2000-01-01", "Male", (auth_token) => {
           localStorage["auth_token"] = auth_token;
           localStorage["username"] = username;
           cur.turnToMain();
         }, () => {
-            cur.setState({stage: 5, warning: "Username already taken", latitude: latitude, longitude: longitude})
+          cur.setState({stage: 5, warning: "Username already taken", latitude: latitude, longitude: longitude})
         })
       } else {
         cur.setState({
-            stage: cur.state.stage + 1
-          })
+          stage: cur.state.stage + 1
+        })
       }
     }
   }
