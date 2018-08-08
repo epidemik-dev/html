@@ -21,12 +21,19 @@ var App = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
+        _this.state = {
+            login: 0
+        };
+
         login_is_valid(function (is_valid) {
             if (is_valid === false) {
-                _this.state = 0;
+                _this.state = {
+                    login: 0
+                };
             } else {
-                _this.setState({ login: 2 });
-                localStorage["auth_token"] = is_valid;
+                _this.state = {
+                    login: 2
+                };
             }
         });
         return _this;
@@ -36,7 +43,7 @@ var App = function (_React$Component) {
         key: 'render',
         value: function render() {
             if (this.state.login === 0) {
-                return React.createElement(LoginPage, { switchToCreate: this.turnToCreate() });
+                return React.createElement(LoginPage, { switchToCreate: this.turnToCreate(), turnToMain: this.turnToMain() });
             } else if (this.state.login === 1) {
                 return React.createElement(CreatePage, null);
             } else if (this.state.login === 2) {
@@ -46,7 +53,7 @@ var App = function (_React$Component) {
                     'Not Loggin'
                 );
             } else {
-                return React.createElement(LoginPage, { switchToCreate: this.turnToCreate() });
+                return React.createElement(LoginPage, { switchToCreate: this.turnToCreate(), turnToMain: this.turnToMain() });
             }
         }
     }, {
@@ -55,6 +62,14 @@ var App = function (_React$Component) {
             var view = this;
             return function () {
                 view.setState({ login: 1 });
+            };
+        }
+    }, {
+        key: 'turnToMain',
+        value: function turnToMain() {
+            var view = this;
+            return function () {
+                view.setState({ login: 2 });
             };
         }
     }]);

@@ -1,8 +1,11 @@
+import { NetworkAPI } from "../network_api/NetworkAPI.js";
+
 export class LoginPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.switchToCreate = props.switchToCreate
+    this.turnToMain = props.turnToMain
   }
 
   render() {
@@ -18,7 +21,6 @@ export class LoginPage extends React.Component {
           </label>
           <input
             type="text"
-            id="usernameText"
             placeholder="Enter Username"
             name="uname"
             required></input>
@@ -28,7 +30,6 @@ export class LoginPage extends React.Component {
           </label>
           <input
             type="password"
-            id="passwordText"
             placeholder="Enter Password"
             name="psw"
             required></input>
@@ -47,5 +48,15 @@ export class LoginPage extends React.Component {
     );
   }
 
-  loginReact() {}
+  loginReact() {
+    cur = this
+    const username = document.getElementsByName("uname")[0].value
+    const password = document.getElementsByName("psw")[0].value
+    NetworkAPI.network_login(username, password, (auth_token) => {
+      localStorage["auth_token"] = auth_token
+      cur.turnToMain();
+    }, () => {
+      document.getElementsByName("uname")[0].value = "Invalid username/password"
+    })
+  }
 }

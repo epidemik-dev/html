@@ -11,7 +11,7 @@ export var NetworkAPI = function () {
         _classCallCheck(this, NetworkAPI);
     }
 
-    _createClass(NetworkAPI, [{
+    _createClass(NetworkAPI, null, [{
         key: "network_login",
 
 
@@ -170,6 +170,26 @@ export var NetworkAPI = function () {
                 url: URL,
                 success: sucess,
                 error: failure
+            });
+        }
+
+        // String (Number Number -> Void) (Void -> Void) -> Void
+        //Function to covert address to Latitude and Longitude
+
+    }, {
+        key: "network_get_location",
+        value: function network_get_location(address, sucess, failure) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'address': address
+            }, function (results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    sucess(latitude, longitude);
+                } else {
+                    failure();
+                }
             });
         }
     }]);

@@ -1,8 +1,8 @@
-import * as NetworkAPI from '../network_api/NetworkAPI.js';
+import { NetworkAPI } from '../network_api/NetworkAPI.js';
 // Void -> Boolean
 // Says if the login is written to the disk
 function login_exists() {
-    return localStorage["username"] != undefined && localStorage["username"] != "" && localStorage["password"] != undefined && localStorage["password"] != "" && localStorage["auth_token"] != undefined && localStorage["auth_token"] != "";
+    return localStorage["username"] != undefined && localStorage["username"] != "" && localStorage["auth_token"] != undefined && localStorage["auth_token"] != "";
 }
 
 // ([Maybe-String] -> Void) -> Void
@@ -11,10 +11,6 @@ export function login_is_valid(callback) {
     if (!login_exists()) {
         callback(false);
     } else {
-        NetworkAPI.network_login(localStorage["username"], localStorage["password"], function (auth_token) {
-            callback(auth_token);
-        }, function () {
-            callback(false);
-        });
+        callback(true);
     }
 }

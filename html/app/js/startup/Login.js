@@ -6,6 +6,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+import { NetworkAPI } from "../network_api/NetworkAPI.js";
+
 export var LoginPage = function (_React$Component) {
   _inherits(LoginPage, _React$Component);
 
@@ -15,6 +17,7 @@ export var LoginPage = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (LoginPage.__proto__ || Object.getPrototypeOf(LoginPage)).call(this, props));
 
     _this.switchToCreate = props.switchToCreate;
+    _this.turnToMain = props.turnToMain;
     return _this;
   }
 
@@ -38,7 +41,6 @@ export var LoginPage = function (_React$Component) {
           ),
           React.createElement("input", {
             type: "text",
-            id: "usernameText",
             placeholder: "Enter Username",
             name: "uname",
             required: true }),
@@ -53,7 +55,6 @@ export var LoginPage = function (_React$Component) {
           ),
           React.createElement("input", {
             type: "password",
-            id: "passwordText",
             placeholder: "Enter Password",
             name: "psw",
             required: true })
@@ -80,7 +81,17 @@ export var LoginPage = function (_React$Component) {
     }
   }, {
     key: "loginReact",
-    value: function loginReact() {}
+    value: function loginReact() {
+      cur = this;
+      var username = document.getElementsByName("uname")[0].value;
+      var password = document.getElementsByName("psw")[0].value;
+      NetworkAPI.network_login(username, password, function (auth_token) {
+        localStorage["auth_token"] = auth_token;
+        cur.turnToMain();
+      }, function () {
+        document.getElementsByName("uname")[0].value = "Invalid username/password";
+      });
+    }
   }]);
 
   return LoginPage;

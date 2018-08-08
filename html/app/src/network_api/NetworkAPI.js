@@ -7,7 +7,7 @@ export class NetworkAPI {
     // String String (String -> Void) (Error -> Void) -> Void
     // Logs this user into the server
     // Calls the callback when done with the auth token (or failure)
-    network_login(username, password, sucess, failure) {
+    static network_login(username, password, sucess, failure) {
         var URL = main_url + "/login" + version_extension + "&username=" + username + "&password=" + password
         $.ajax({
             method: "POST",
@@ -22,7 +22,7 @@ export class NetworkAPI {
     // String String Number Number DateString, String (String -> Void) (Error -> Void) -> Void
     // Creates this account
     // Calls the callback when done with the auth token (or failure)
-    network_create_an_account(username, password, latitude, longitude, dob, gender, sucess, failure) {
+    static network_create_an_account(username, password, latitude, longitude, dob, gender, sucess, failure) {
         var URL = main_url + "/users" + version_extension
         $.ajax({
             method: "POST",
@@ -45,7 +45,7 @@ export class NetworkAPI {
 
     // String String (Boolean -> Void) (Error -> Void) -> Void
     // Returns the sickness of this user
-    network_get_status(username, auth_token, sucess, failure) {
+    static network_get_status(username, auth_token, sucess, failure) {
         var URL = main_url + "/users/" + username + "/sickness" + version_extension + "&auth_token=" + auth_token;
         $.ajax({
             method: "GET",
@@ -59,7 +59,7 @@ export class NetworkAPI {
 
     // String String DateString [List-of Number] String (Void -> Void) (Error -> Void) -> Void
     // Marks this user as sick
-    network_report_sick(username, disease_name, symptoms, auth_token, sucess, failure) {
+    static network_report_sick(username, disease_name, symptoms, auth_token, sucess, failure) {
         var date = new Date().toISOString().split("T")[0];
         var URL = main_url + "/users/" + username + "/diseases" + version_extension + "&auth_token=" + auth_token
         $.ajax({
@@ -80,7 +80,7 @@ export class NetworkAPI {
 
     // String ([List-of Disease] -> Void) (Error -> Void) -> Void
     // Returns a list of every disease in the system
-    network_get_all_diseases(auth_token, sucess, failure) {
+    static network_get_all_diseases(auth_token, sucess, failure) {
         var region = {
             lat_min: -600,
             lat_max: 600,
@@ -100,7 +100,7 @@ export class NetworkAPI {
 
     // String String ([List-of Disease] -> Void) (Error -> Void) -> Void
     // Returns a list of every trend in the system
-    network_get_all_trends(username, auth_token, sucess, failure) {
+    static network_get_all_trends(username, auth_token, sucess, failure) {
         var URL = main_url + "/trends/" + username + version_extension + "&auth_token=" + auth_token
         $.ajax({
             method: "GET",
@@ -114,7 +114,7 @@ export class NetworkAPI {
 
     // String String (Void -> Void) (Error -> Void) -> Void
     // Marks this user as healthy
-    network_report_healthy(username, auth_token, sucess, failure) {
+    static network_report_healthy(username, auth_token, sucess, failure) {
         var date = new Date().toISOString().split("T")[0];
         var URL = main_url + "/users/" + username + "/diseases" + version_extension +
             "&auth_token=" + auth_token + "&date_healthy=" + date
@@ -130,7 +130,7 @@ export class NetworkAPI {
 
     // String (JSON -> Void) (Error -> Void) -> Void
     // Loads the data used to diagnose users
-    network_load_diagnosis(auth_token, sucess, failure) {
+    static network_load_diagnosis(auth_token, sucess, failure) {
         var URL = main_url + "/diseases/symptoms" + version_extension +
             "&auth_token=" + auth_token
         $.ajax({
@@ -142,5 +142,22 @@ export class NetworkAPI {
             error: failure
         });
     }
+
+    // String (Number Number -> Void) (Void -> Void) -> Void
+    //Function to covert address to Latitude and Longitude
+    static network_get_location(address, sucess, failure) {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+            'address': address 
+        }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                sucess(latitude, longitude);
+            } else {
+                failure();
+            }
+        });
+    };
 
 }

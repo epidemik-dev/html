@@ -10,25 +10,32 @@ class App extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            login: 0
+        }
+
         login_is_valid((is_valid) => {
             if(is_valid === false) {
-                this.state = 0;
+                this.state = {
+                    login: 0
+                }
             } else {
-                this.setState({login: 2});
-                localStorage["auth_token"] = is_valid
+                this.state = {
+                    login: 2
+                }
             }
         })
     }
 
     render() {
         if(this.state.login === 0) {
-            return (<LoginPage switchToCreate={this.turnToCreate()}></LoginPage>);
+            return (<LoginPage switchToCreate={this.turnToCreate()} turnToMain = {this.turnToMain()}></LoginPage>);
         } else if(this.state.login === 1) {
             return (<CreatePage></CreatePage>);
         } else if(this.state.login === 2) {
             return (<div>Not Loggin</div>);
         } else {
-            return (<LoginPage switchToCreate={this.turnToCreate()}></LoginPage>);
+            return (<LoginPage switchToCreate={this.turnToCreate()} turnToMain = {this.turnToMain()}></LoginPage>);
         }
     }
 
@@ -36,6 +43,13 @@ class App extends React.Component {
         var view = this;
         return function() {
             view.setState({login: 1});
+        }
+    }
+
+    turnToMain() {
+        var view = this;
+        return function() {
+            view.setState({login: 2});
         }
     }
 }
