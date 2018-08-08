@@ -40,3 +40,6 @@ function hideTrends() {
         // Animation complete.
     });
 }
+
+
+

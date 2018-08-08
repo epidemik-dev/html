@@ -1,23 +1,45 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-/* global google */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+import { map_style } from './MapPrefs.js';
+
+var Map = function (_React$Component) {
+    _inherits(Map, _React$Component);
+
+    function Map() {
+        _classCallCheck(this, Map);
+
+        return _possibleConstructorReturn(this, (Map.__proto__ || Object.getPrototypeOf(Map)).apply(this, arguments));
+    }
+
+    _createClass(Map, [{
+        key: 'render',
+        value: function render() {}
+    }]);
+
+    return Map;
+}(React.Component);
 
 // Void -> Void
 //Creates this map object and adds the overlays to the map
+
+
 function initMap() {
-    var uluru = {lat: 42.4706918, lng: -71.0628642};
+    var uluru = { lat: 42.4706918, lng: -71.0628642 };
     this.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 5,
         center: uluru,
         minZoom: 5,
         maxZoom: 15,
         disableDefaultUI: true,
-        style: hideStyle
+        style: map_style
     });
-    this.map.setOptions({styles: hideStyle});
+    this.map.setOptions({ styles: map_style });
     this.map.addListener('bounds_changed', function () {
         addOverlays(map);
     });
@@ -37,280 +59,3 @@ function addOverlay() {
         map: this.map
     });
 }
-
- var hideStyle = [
-  {
-    "featureType": "administrative",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.country",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.locality",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.neighborhood",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.province",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.man_made",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.natural",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.natural.landcover",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "landscape.natural.terrain",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.attraction",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.business",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.government",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.medical",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "stylers": [
-      {
-        "visibility": "on"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.place_of_worship",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.school",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.sports_complex",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "stylers": [
-      {
-        "visibility": "simplified"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "transit",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  }
-];

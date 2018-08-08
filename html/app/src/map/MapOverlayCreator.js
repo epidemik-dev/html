@@ -1,7 +1,3 @@
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,33 +9,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // - DiseaseBranch
 // - DiseaseLeaf
 
-var DiseaseBranch = function () {
-    function DiseaseBranch(latMin, latMax, longMin, longMax) {
-        _classCallCheck(this, DiseaseBranch);
+class DiseaseBranch {
 
-        this.latMin = latMin;
-        this.latMax = latMax;
-        this.longMin = longMin;
-        this.longMax = longMax;
+    constructor(latMin, latMax, longMin, longMax) {
+        this.latMin = latMin
+        this.latMax = latMax
+        this.longMin = longMin
+        this.longMax = longMax
 
-        this.latWidth = this.latMax - this.latMin;
-        this.longWidth = this.longMax - this.longMin;
+        this.latWidth = (this.latMax - this.latMin)
+        this.longWidth = (this.longMax - this.longMin)
 
         this.numDiseases = 0;
     }
 
-    _createClass(DiseaseBranch, [{
-        key: 'initSubbranches',
-        value: function initSubbranches() {
-            this.topLeft = new DiseaseBranch(this.latMin, this.latMin + this.latWidth / 2, this.longMin + this.longWidth / 2, this.longMax);
-            this.topRight = new DiseaseBranch(this.latMin + this.latWidth / 2, this.latMax, this.longMin + this.longWidth / 2, this.longMax);
-            this.bottomLeft = new DiseaseBranch(this.latMin, this.latMin + this.latWidth / 2, this.longMin, this.longMin + this.longWidth / 2);
-            this.bottomRight = new DiseaseBranch(this.latMin + this.latWidth / 2, this.latMax, this.longMin, this.longMin + this.longWidth / 2);
-        }
-    }]);
+    initSubbranches() {
+        this.topLeft = new DiseaseBranch(this.latMin, this.latMin + this.latWidth / 2, this.longMin + this.longWidth / 2, this.longMax);
+        this.topRight = new DiseaseBranch(this.latMin + this.latWidth / 2, this.latMax, this.longMin + this.longWidth / 2, this.longMax);
+        this.bottomLeft = new DiseaseBranch(this.latMin, this.latMin + this.latWidth / 2, this.longMin, this.longMin + this.longWidth / 2);
+        this.bottomRight = new DiseaseBranch(this.latMin + this.latWidth / 2, this.latMax, this.longMin, this.longMin + this.longWidth / 2);
+    }
 
-    return DiseaseBranch;
-}();
+}
 
 var splits;
 var branch = new DiseaseBranch(-360, 360, -360, 360);
@@ -49,11 +40,12 @@ var lastZoom = null;
 var hasLoadedData = false;
 var hasLoadedMap = false;
 
+
 // Map -> Void
 // Adds the proper overlays to the map
 function getData(map) {
     // Sending and receiving data in JSON format using POST method
-    var URL = "http://localhost:3000/diseases";
+    var URL = "http://localhost:3000/diseases"
     network_get_all_diseases(localStorage['token'], function (response) {
         diseases = response;
         for (var i in diseases) {
@@ -71,7 +63,7 @@ function getData(map) {
 // Adds the overlays to the map
 function addOverlays(map) {
     var curZoom = map.getZoom();
-    if (!hasLoadedData && !hasLoadedMap || lastZoom !== null && lastZoom === curZoom) {
+    if ((!hasLoadedData && !hasLoadedMap) || (lastZoom !== null && lastZoom === curZoom)) {
         return;
     }
     lastZoom = curZoom;
@@ -109,7 +101,7 @@ function addOverlays(map) {
                     south: latMin,
                     east: longMax,
                     west: longMin
-                };
+                }
                 diseasePolys.push(new DiseasePolygon(bounds, numDiseases));
                 realPointCounts += 1;
                 averageIntensity += numDiseases;
@@ -117,10 +109,10 @@ function addOverlays(map) {
         }
     }
     averageIntensity /= realPointCounts;
-    map.totalOverlays = realPointCounts;
+    map.totalOverlays = (realPointCounts);
     clearOverlays(map);
     for (var i in diseasePolys) {
-        var power = diseasePolys[i].intensity / averageIntensity;
+        var power = (diseasePolys[i].intensity / averageIntensity);
         var toAdd = new google.maps.Rectangle({
             bounds: diseasePolys[i].bounds,
             editable: false,
@@ -139,7 +131,7 @@ function addOverlays(map) {
 // Map -> Void
 // Removes all overlays from the map
 function clearOverlays(map) {
-    for (var x in this.allRects) {
+    for (const x in this.allRects) {
         if (this.allRects[x] !== "") {
             allRects[x].setMap(null);
         }
@@ -147,6 +139,7 @@ function clearOverlays(map) {
 }
 
 var errorBound = 0.005;
+
 
 // Branch Number Number Number Number -> Void
 //Returns the count of all the disease points in this range
@@ -156,7 +149,10 @@ function getWeightForRange(branch, curLatMin, curLatMax, curLongMin, curLongMax)
     } else if (branch.topLeft === undefined) {
         return branch.numDiseases;
     } else {
-        return getWeightForRange(branch.topLeft, curLatMin, curLatMax, curLongMin, curLongMax) + getWeightForRange(branch.topRight, curLatMin, curLatMax, curLongMin, curLongMax) + getWeightForRange(branch.bottomLeft, curLatMin, curLatMax, curLongMin, curLongMax) + getWeightForRange(branch.bottomRight, curLatMin, curLatMax, curLongMin, curLongMax);
+        return getWeightForRange(branch.topLeft, curLatMin, curLatMax, curLongMin, curLongMax) +
+            getWeightForRange(branch.topRight, curLatMin, curLatMax, curLongMin, curLongMax) +
+            getWeightForRange(branch.bottomLeft, curLatMin, curLatMax, curLongMin, curLongMax) +
+            getWeightForRange(branch.bottomRight, curLatMin, curLatMax, curLongMin, curLongMax);
     }
 }
 
@@ -190,14 +186,17 @@ function getAll(branch) {
     } else if (branch.topLeft === undefined) {
         return branch.numDiseases;
     } else {
-        return getAll(branch.topLeft) + getAll(branch.topRight) + getAll(branch.bottomLeft) + getAll(branch.bottomRight);
+        return getAll(branch.topLeft) +
+            getAll(branch.topRight) +
+            getAll(branch.bottomLeft) +
+            getAll(branch.bottomRight);
     }
 }
 
 // Branch -> Boolean
 // Returns if the branch's range is in the error bound
 function isSmallBranch(branch) {
-    return branch.latMax - branch.latMin < errorBound && branch.longMax - branch.longMin < errorBound;
+    return branch.latMax - branch.latMin < errorBound && branch.longMax - branch.longMin < errorBound
 }
 
 // Branch Number Number -> Boolean

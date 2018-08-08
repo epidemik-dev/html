@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+
 // Void -> Void
 // Brings the user back to the map
 function go_back() {
