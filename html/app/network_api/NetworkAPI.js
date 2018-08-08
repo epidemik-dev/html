@@ -1,5 +1,5 @@
-//var main_url = "https://epidemik.us/api"
-var main_url = "http://localhost:3000"
+var main_url = "https://epidemik.us/api"
+//var main_url = "http://localhost:3000"
 var version_extension = "?version=1.0"
 
 
