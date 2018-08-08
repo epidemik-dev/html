@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <link rel="stylesheet" href="Sickness/sickness.css" type="text/css"/>
+        <link rel="stylesheet" href="./css/sickness.css" type="text/css"/>
 
         <title>Sickness Selector</title>
         <meta charset="UTF-8">
@@ -14,7 +14,7 @@ and open the template in the editor.
     </head>
     <body>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="./network_api/NetworkAPI.js"></script>
+        <script src="./js/network_api/NetworkAPI.js"></script>
         <div class = "ButtonHolder">  
             <button onclick = "go_back()" class = "back" >Back</button>
             <button onclick = "go_to_symptoms()" class = "submit">Next</button>
@@ -25,8 +25,8 @@ and open the template in the editor.
             <select class = "disease_selector" id = "disease_selector">               
             </select>
         </div>
-        <script src="Sickness/SendSickness.js"></script>
-        <script src="Sickness/LoadDiagnosis.js"></script>
+        <script src="./js/sickness/SendSickness.js"></script>
+        <script src="./js/sickness/LoadDiagnosis.js"></script>
         <script>loadDiseases();</script>
     </body>
 </html>

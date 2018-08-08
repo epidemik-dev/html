@@ -1,24 +1,24 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="./css/stylesheet.css">
     </head>
 <body style="margin: 0;">
     <div id="map">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script src="./network_api/NetworkAPI.js"></script>
-        <script src = "ButtonControls.js"></script>
-        <script src = "DiseasePolygon.js"></script>
-        <script src = "Disease.js"></script>
-        <script src = "MapOverlayCreator.js"></script>
-        <script src = "Map.js"></script>
-        <script src = "Login.js"></script>
+        <script src="./js/network_api/NetworkAPI.js"></script>
+        <script src = "./js/sickness/ButtonControls.js"></script>
+        <script src = "./js/map/DiseasePolygon.js"></script>
+        <script src = "./js/map/Disease.js"></script>
+        <script src = "./js/map/MapOverlayCreator.js"></script>
+        <script src = "./js/map/Map.js"></script>
+        <script src = "./js/startup/Login.js"></script>
         <script async defer
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQDNSjsR5fSbsRwOOoPLMLRL1_WsEoUtY&callback=initMap">
         </script>
     </div>
     <div class="buttons"> 
         <button class="healthy" id="sickOrHealthy" value="sick" onclick="handleClick()"><span>You Are Healthy: Report Sick</span></button>
-        <img class="trendsButton" id="trendsButton" src="trends.png" onclick="properlyShowTrends();" />
+        <img class="trendsButton" id="trendsButton" src="./img/trends.png" onclick="properlyShowTrends();" />
     </div>
     <div id="trendsView">
         <div id="trend">Trends</div>
@@ -26,8 +26,8 @@
     <div id="personalTrendsView">
         <div id="pTrend">Trends</div>
     </div>
-    <script src = "GlobalTrends/TrendsAnimation.js"></script>
-    <script src = "GlobalTrends/CreateTrends.js"></script>
+    <script src = "./js/trends/TrendsAnimation.js"></script>
+    <script src = "./js/trends/CreateTrends.js"></script>
     <script> checkLogin("index.html");</script>
 </body>
 </html>
