@@ -1,4 +1,5 @@
 import { NetworkAPI } from "../network_api/NetworkAPI.js";
+import React from 'react'
 
 export class LoginPage extends React.Component {
 
@@ -35,7 +36,7 @@ export class LoginPage extends React.Component {
             required></input>
         </div>
 
-        <button type="submit" onClick={this.loginReact}>Login</button>
+        <button type="submit" onClick={this.loginReact()}>Login</button>
 
         <div className="container" id="buttons">
           <button
@@ -49,14 +50,18 @@ export class LoginPage extends React.Component {
   }
 
   loginReact() {
-    cur = this
-    const username = document.getElementsByName("uname")[0].value
-    const password = document.getElementsByName("psw")[0].value
-    NetworkAPI.network_login(username, password, (auth_token) => {
-      localStorage["auth_token"] = auth_token
-      cur.turnToMain();
-    }, () => {
-      document.getElementsByName("uname")[0].value = "Invalid username/password"
-    })
+    var cur = this
+    return function() {
+      const username = document.getElementsByName("uname")[0].value
+      const password = document.getElementsByName("psw")[0].value
+      NetworkAPI.network_login(username, password, (auth_token) => {
+        console.log(auth_token)
+        localStorage["auth_token"] = auth_token
+        cur.turnToMain();
+      }, (error) => {
+        console.log(error, "error");
+        document.getElementsByName("uname")[0].value = "Invalid username/password"
+      })
+    }
   }
 }

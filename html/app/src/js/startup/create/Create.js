@@ -1,4 +1,5 @@
 import {NetworkAPI} from "../../network_api/NetworkAPI.js";
+import React from 'react'
 
 export class CreatePage extends React.Component {
 

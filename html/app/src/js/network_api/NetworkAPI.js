@@ -1,3 +1,5 @@
+import Ajax from 'react-ajax'
+
 //var main_url = "https://epidemik.us/api"
 var main_url = "http://localhost:3000"
 var version_extension = "?version=1.0"
@@ -9,14 +11,9 @@ export class NetworkAPI {
     // Calls the callback when done with the auth token (or failure)
     static network_login(username, password, sucess, failure) {
         var URL = main_url + "/login" + version_extension + "&username=" + username + "&password=" + password
-        $.ajax({
-            method: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+        fetch(URL, {
+            method: "POST"
+        }).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String String Number Number DateString, String (String -> Void) (Error -> Void) -> Void
@@ -24,7 +21,7 @@ export class NetworkAPI {
     // Calls the callback when done with the auth token (or failure)
     static network_create_an_account(username, password, latitude, longitude, dob, gender, sucess, failure) {
         var URL = main_url + "/users" + version_extension
-        $.ajax({
+        Ajax.ajax({
             method: "POST",
             contentType: 'application/json',
             dataType: 'json',
@@ -47,7 +44,7 @@ export class NetworkAPI {
     // Returns the sickness of this user
     static network_get_status(username, auth_token, sucess, failure) {
         var URL = main_url + "/users/" + username + "/sickness" + version_extension + "&auth_token=" + auth_token;
-        $.ajax({
+        Ajax.ajax({
             method: "GET",
             contentType: 'application/json',
             dataType: 'json',
@@ -62,7 +59,7 @@ export class NetworkAPI {
     static network_report_sick(username, disease_name, symptoms, auth_token, sucess, failure) {
         var date = new Date().toISOString().split("T")[0];
         var URL = main_url + "/users/" + username + "/diseases" + version_extension + "&auth_token=" + auth_token
-        $.ajax({
+        Ajax.ajax({
             method: "POST",
             contentType: 'application/json',
             dataType: 'json',
@@ -88,7 +85,7 @@ export class NetworkAPI {
             long_max: 600
         }
         var URL = main_url + "/diseases" + version_extension + "&auth_token=" + auth_token + "&region=" + JSON.stringify(region)
-        $.ajax({
+        Ajax.ajax({
             method: "GET",
             contentType: 'application/json',
             dataType: 'json',
@@ -102,7 +99,7 @@ export class NetworkAPI {
     // Returns a list of every trend in the system
     static network_get_all_trends(username, auth_token, sucess, failure) {
         var URL = main_url + "/trends/" + username + version_extension + "&auth_token=" + auth_token
-        $.ajax({
+        Ajax.ajax({
             method: "GET",
             contentType: 'application/json',
             dataType: 'json',
@@ -118,7 +115,7 @@ export class NetworkAPI {
         var date = new Date().toISOString().split("T")[0];
         var URL = main_url + "/users/" + username + "/diseases" + version_extension +
             "&auth_token=" + auth_token + "&date_healthy=" + date
-        $.ajax({
+        Ajax.ajax({
             method: "PATCH",
             contentType: 'application/json',
             dataType: 'json',
@@ -133,7 +130,7 @@ export class NetworkAPI {
     static network_load_diagnosis(auth_token, sucess, failure) {
         var URL = main_url + "/diseases/symptoms" + version_extension +
             "&auth_token=" + auth_token
-        $.ajax({
+        Ajax.ajax({
             method: "GET",
             contentType: 'application/json',
             dataType: 'json',
@@ -146,11 +143,11 @@ export class NetworkAPI {
     // String (Number Number -> Void) (Void -> Void) -> Void
     //Function to covert address to Latitude and Longitude
     static network_get_location(address, sucess, failure) {
-        var geocoder = new google.maps.Geocoder();
+        let geocoder = new window.google.maps.Geocoder();
         geocoder.geocode({
             'address': address 
         }, function (results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
+            if (status === "OK") {
                 var latitude = results[0].geometry.location.lat();
                 var longitude = results[0].geometry.location.lng();
                 sucess(latitude, longitude);

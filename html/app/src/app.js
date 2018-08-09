@@ -1,9 +1,12 @@
-import {login_is_valid} from './startup/LoginChecker.js'
-import {LoginPage} from './startup/Login.js'
-import {CreatePage} from './startup/create/Create.js'
-import React from 'react'
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-class App extends React.Component {
+import {login_is_valid} from './js/startup/LoginChecker.js'
+import {LoginPage} from './js/startup/Login.js'
+import {CreatePage} from './js/startup/create/Create.js'
+
+class App extends Component {
 
     // State
         // login: 0 = display login, 1 = display create, 2 = display main
@@ -54,3 +57,5 @@ class App extends React.Component {
         }
     }
 }
+
+export default App;
