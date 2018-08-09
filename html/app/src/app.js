@@ -1,6 +1,7 @@
 import {login_is_valid} from './startup/LoginChecker.js'
 import {LoginPage} from './startup/Login.js'
 import {CreatePage} from './startup/create/Create.js'
+import React from 'react'
 
 class App extends React.Component {
 
@@ -53,8 +54,3 @@ class App extends React.Component {
         }
     }
 }
-
-ReactDOM.render(
-    <App/>,
-    document.getElementById("app-container")
-  );
