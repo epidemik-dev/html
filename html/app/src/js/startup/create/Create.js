@@ -14,7 +14,7 @@ export class CreatePage extends React.Component {
 
   render() {
     if (this.state.stage === 0) {
-      return this.getBody(this.genderSelector);
+      return this.getBody(GenderSelector);
     } else if (this.state.stage === 1) {
       return this.getBody(this.illnessSelector);
     } else if (this.state.stage === 2) {
@@ -71,18 +71,28 @@ export class CreatePage extends React.Component {
   getBody(cur_stage) {
     return (
       <div className="CreatePage">
-        {cur_stage}
+        <cur_stage></cur_stage>
         <button type="button" onClick={this.nextItem()}>Next</button>
         <div id="warning">{this.state.warning}</div>
       </div >
     )
   }
 
-  genderSelector = (
-    <div>Select ur gender</div>
-  )
   illnessSelector = (
-    <div>Select ur illnesses</div>
+    <form>
+      <span>Hypertension</span>
+      <input type="radio" id="Male" name="hypertension"></input>
+      <br></br>
+      <span>Diabetes</span>
+      <input type="radio" id="Female" name="diabetes"></input>
+      <br></br>
+      <span>Smoke</span>
+      <input type="radio" id="Other" name="smoke"></input>
+      <br></br>
+      <span>High Cholesterol</span>
+      <input type="radio" id="Other" name="cholesterol"></input>
+      <br></br>
+    </form>
   )
   ageSelector = (
     <div>Select ur age</div>
@@ -121,4 +131,22 @@ export class CreatePage extends React.Component {
       <input type="password" name="psw" required></input>
     </div>
   );
+}
+
+class GenderSelector extends React.Component {
+  render() {
+    return (
+      <form>
+        <span>Male</span>
+        <input type="radio" id="Male" name="gender"></input>
+        <br></br>
+        <span>Female</span>
+        <input type="radio" id="Female" name="gender"></input>
+        <br></br>
+        <span>Other</span>
+        <input type="radio" id="Other" name="gender"></input>
+        <br></br>
+      </form>
+    )
+  }
 }

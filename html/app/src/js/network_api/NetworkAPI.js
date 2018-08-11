@@ -1,5 +1,3 @@
-import Ajax from 'react-ajax'
-
 //var main_url = "https://epidemik.us/api"
 var main_url = "http://localhost:3000"
 var version_extension = "?version=1.0"
@@ -21,11 +19,9 @@ export class NetworkAPI {
     // Calls the callback when done with the auth token (or failure)
     static network_create_an_account(username, password, latitude, longitude, dob, gender, sucess, failure) {
         var URL = main_url + "/users" + version_extension
-        Ajax.ajax({
+        fetch(URL, {
             method: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
+            body: JSON.stringify({
                 username: username,
                 password: password,
                 latitude: latitude,
@@ -33,25 +29,15 @@ export class NetworkAPI {
                 gender: gender,
                 date_of_birth: dob,
                 deviceID: null
-            }),
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+            })
+        }).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String String (Boolean -> Void) (Error -> Void) -> Void
     // Returns the sickness of this user
     static network_get_status(username, auth_token, sucess, failure) {
         var URL = main_url + "/users/" + username + "/sickness" + version_extension + "&auth_token=" + auth_token;
-        Ajax.ajax({
-            method: "GET",
-            contentType: 'application/json',
-            dataType: 'json',
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+        fetch(URL).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String String DateString [List-of Number] String (Void -> Void) (Error -> Void) -> Void
@@ -59,20 +45,15 @@ export class NetworkAPI {
     static network_report_sick(username, disease_name, symptoms, auth_token, sucess, failure) {
         var date = new Date().toISOString().split("T")[0];
         var URL = main_url + "/users/" + username + "/diseases" + version_extension + "&auth_token=" + auth_token
-        Ajax.ajax({
+        fetch(URL, {
             method: "POST",
-            contentType: 'application/json',
-            dataType: 'json',
-            data: JSON.stringify({
+            body: JSON.stringify({
                 disease_name: disease_name,
                 date_sick: date,
                 date_healthy: null,
                 symptoms: symptoms
-            }),
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+            })
+        }).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String ([List-of Disease] -> Void) (Error -> Void) -> Void
@@ -85,28 +66,14 @@ export class NetworkAPI {
             long_max: 600
         }
         var URL = main_url + "/diseases" + version_extension + "&auth_token=" + auth_token + "&region=" + JSON.stringify(region)
-        Ajax.ajax({
-            method: "GET",
-            contentType: 'application/json',
-            dataType: 'json',
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+        fetch(URL).then(response => response.json().then(result => sucess(result))).catch(failure);
     }
 
     // String String ([List-of Disease] -> Void) (Error -> Void) -> Void
     // Returns a list of every trend in the system
     static network_get_all_trends(username, auth_token, sucess, failure) {
         var URL = main_url + "/trends/" + username + version_extension + "&auth_token=" + auth_token
-        Ajax.ajax({
-            method: "GET",
-            contentType: 'application/json',
-            dataType: 'json',
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+        fetch(URL).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String String (Void -> Void) (Error -> Void) -> Void
@@ -115,14 +82,9 @@ export class NetworkAPI {
         var date = new Date().toISOString().split("T")[0];
         var URL = main_url + "/users/" + username + "/diseases" + version_extension +
             "&auth_token=" + auth_token + "&date_healthy=" + date
-        Ajax.ajax({
-            method: "PATCH",
-            contentType: 'application/json',
-            dataType: 'json',
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+        fetch(URL, {
+            method: "PATCH"
+        }).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String (JSON -> Void) (Error -> Void) -> Void
@@ -130,14 +92,7 @@ export class NetworkAPI {
     static network_load_diagnosis(auth_token, sucess, failure) {
         var URL = main_url + "/diseases/symptoms" + version_extension +
             "&auth_token=" + auth_token
-        Ajax.ajax({
-            method: "GET",
-            contentType: 'application/json',
-            dataType: 'json',
-            url: URL,
-            success: sucess,
-            error: failure
-        });
+        fetch().then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String (Number Number -> Void) (Void -> Void) -> Void
