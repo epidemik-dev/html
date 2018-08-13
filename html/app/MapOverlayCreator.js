@@ -87,7 +87,6 @@ function addOverlays(map) {
     var diseasePolys = [];
     var realPointCounts = 1.0;
     var averageIntensity = 1.0;
-    console.log(startLat, startLong, endLat, endLong, latWidth, longWidth);
     for (var i = 0; i < numXY; i++) {
         for (var i2 = 0; i2 < numXY; i2++) {
             var latMin = startLat + i * intervalLat;
