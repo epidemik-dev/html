@@ -1,7 +1,7 @@
 import {NetworkAPI} from "../../network_api/NetworkAPI.js";
-import React from 'react'
+import React, {Component} from 'react'
 
-export class CreatePage extends React.Component {
+export class CreatePage extends Component {
 
   constructor(props) {
     super(props);
@@ -14,19 +14,33 @@ export class CreatePage extends React.Component {
 
   render() {
     if (this.state.stage === 0) {
-      return this.getBody(GenderSelector);
+      return this.getBody((
+        <GenderSelector></GenderSelector>
+      ));
     } else if (this.state.stage === 1) {
-      return this.getBody(this.illnessSelector);
+      return this.getBody(
+        <IllnessSelector></IllnessSelector>
+      );
     } else if (this.state.stage === 2) {
-      return this.getBody(this.ageSelector);
+      return this.getBody(
+        <AgeSelector></AgeSelector>
+      );
     } else if (this.state.stage === 3) {
-      return this.getBody(this.dimensionSelector);
+      return this.getBody(
+        <DimensionSelector></DimensionSelector>
+      );
     } else if (this.state.stage === 4) {
-      return this.getBody(this.addressSelector);
+      return this.getBody(
+        <AddressSelector></AddressSelector>
+      );
     } else if (this.state.stage === 5) {
-      document.getElementsByName("street")[0].value = ""
-      document.getElementsByName("city")[0].value = ""
-      return this.getBody(this.usernameSelector);
+      if(document.getElementsByName("street")[0] !== undefined) {
+        document.getElementsByName("street")[0].value = ""
+        document.getElementsByName("city")[0].value = ""
+      }
+      return this.getBody(
+        <UsernameSelector></UsernameSelector>
+      );
     }
   }
 
@@ -48,11 +62,14 @@ export class CreatePage extends React.Component {
           cur.setState({stage: 5, warning: "Password too short", latitude: latitude, longitude: longitude})
           return;
         }
+        console.log(username, password, latitude, longitude, "2000-01-01", "Male");
         NetworkAPI.network_create_an_account(username, password, latitude, longitude, "2000-01-01", "Male", (auth_token) => {
           localStorage["auth_token"] = auth_token;
           localStorage["username"] = username;
+          console.log(cur);
           cur.turnToMain();
-        }, () => {
+        }, (failure) => {
+          throw failure
           cur.setState({stage: 5, warning: "Username already taken", latitude: latitude, longitude: longitude})
         })
       } else {
@@ -71,37 +88,33 @@ export class CreatePage extends React.Component {
   getBody(cur_stage) {
     return (
       <div className="CreatePage">
-        <cur_stage></cur_stage>
+        {cur_stage}
         <button type="button" onClick={this.nextItem()}>Next</button>
         <div id="warning">{this.state.warning}</div>
       </div >
     )
   }
+}
 
-  illnessSelector = (
-    <form>
-      <span>Hypertension</span>
-      <input type="radio" id="Male" name="hypertension"></input>
-      <br></br>
-      <span>Diabetes</span>
-      <input type="radio" id="Female" name="diabetes"></input>
-      <br></br>
-      <span>Smoke</span>
-      <input type="radio" id="Other" name="smoke"></input>
-      <br></br>
-      <span>High Cholesterol</span>
-      <input type="radio" id="Other" name="cholesterol"></input>
-      <br></br>
-    </form>
-  )
-  ageSelector = (
-    <div>Select ur age</div>
-  )
-  dimensionSelector = (
-    <div>Select ur weight/height</div>
-  )
-  addressSelector = (
-    <div className="address" id="createAddress">
+class UsernameSelector extends Component {
+  render() {
+    return <div className="username" id="createTexts">
+      <label>
+        <b>Username</b>
+      </label>
+      <input type="text" name="uname" required></input>
+
+      <label>
+        <b>Password</b>
+      </label>
+      <input type="password" name="psw" required></input>
+    </div>
+  }
+}
+
+class AddressSelector extends Component {
+  render() {
+    return <div className="address" id="createAddress">
       <label>
         <b>Street</b>
       </label>
@@ -116,37 +129,64 @@ export class CreatePage extends React.Component {
       </label>
       <input type="text" name="state" required></input>
     </div>
-
-  )
-  usernameSelector = (
-    <div className="username" id="createTexts">
-      <label>
-        <b>Username</b>
-      </label>
-      <input type="text" name="uname" required></input>
-
-      <label>
-        <b>Password</b>
-      </label>
-      <input type="password" name="psw" required></input>
-    </div>
-  );
+  }
 }
 
-class GenderSelector extends React.Component {
+class DimensionSelector extends Component {
   render() {
-    return (
-      <form>
-        <span>Male</span>
-        <input type="radio" id="Male" name="gender"></input>
-        <br></br>
-        <span>Female</span>
-        <input type="radio" id="Female" name="gender"></input>
-        <br></br>
-        <span>Other</span>
-        <input type="radio" id="Other" name="gender"></input>
-        <br></br>
-      </form>
-    )
+    var to_inject = []
+    for(var feet = 3; feet <= 8; feet++) {
+      for(var inches = 0; inches <= 11; inches++) {
+        to_inject.push(<option key={feet*12+inches}>{feet + "'" + inches + "\" tall"}</option>)
+      }
+    }
+    return <select id="height_selector">{to_inject}</select>
+  } 
+}
+
+class IllnessSelector extends Component {
+  render() {
+    return <form>
+      <span>Hypertension</span>
+      <input type="checkbox" id="Male" name="hypertension"></input>
+      <br></br>
+      <span>Diabetes</span>
+      <input type="checkbox" id="Female" name="diabetes"></input>
+      <br></br>
+      <span>Smoke</span>
+      <input type="checkbox" id="Other" name="smoke"></input>
+      <br></br>
+      <span>High Cholesterol</span>
+      <input type="checkbox" id="Other" name="cholesterol"></input>
+      <br></br>
+    </form>
   }
+}
+
+  class AgeSelector extends Component {
+    render() {
+      var to_inject = [<option key="0">{"< 12 Months Old"}</option>]
+      for(var i = 1; i <151; i++) {
+        to_inject.push(<option key="1">{i + " Years Old"}</option>)
+      }
+      return <select id="age_selector">{to_inject}</select>
+    } 
+  }
+
+  class GenderSelector extends Component {
+    render() {
+      return (
+        <form>
+          <span>Male</span>
+          <input type="radio" id="Male" name="gender"></input>
+          <br></br>
+          <span>Female</span>
+          <input type="radio" id="Female" name="gender"></input>
+          <br></br>
+          <span>Other</span>
+          <input type="radio" id="Other" name="gender"></input>
+          <br></br>
+        </form>
+      )
+    }
 }
