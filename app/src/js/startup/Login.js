@@ -1,4 +1,4 @@
-import { NetworkAPI } from "../network_api/NetworkAPI.js";
+import NetworkAPI from "../network_api/NetworkAPI.js";
 import React from 'react'
 
 export class LoginPage extends React.Component {

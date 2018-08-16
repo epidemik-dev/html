@@ -1,4 +1,4 @@
-import React, { PropTypes as T } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import cache from './/ScriptCache'
@@ -24,7 +24,7 @@ export const wrapper = (options) => (WrappedComponent) => {
       const refs = this.refs;
       this.scriptCache.google.onLoad((err, tag) => {
         const maps = window.google.maps;
-        const props = Object.assign({}, this.props, {
+        Object.assign({}, this.props, {
           loaded: this.state.loaded
         });
 

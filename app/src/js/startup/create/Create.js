@@ -1,4 +1,4 @@
-import {NetworkAPI} from "../../network_api/NetworkAPI.js";
+import NetworkAPI from "../../network_api/NetworkAPI.js";
 import React, {Component} from 'react'
 
 export class CreatePage extends Component {
@@ -69,7 +69,6 @@ export class CreatePage extends Component {
           console.log(cur);
           cur.turnToMain();
         }, (failure) => {
-          throw failure
           cur.setState({stage: 5, warning: "Username already taken", latitude: latitude, longitude: longitude})
         })
       } else {

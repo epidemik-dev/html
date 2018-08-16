@@ -1,8 +1,8 @@
 import {map_style} from './MapPrefs.js'
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
 
 export class Map extends Component {
+    
     componentDidUpdate(prevProps, prevState) {
         this.loadMap();
     }
@@ -12,11 +12,7 @@ export class Map extends Component {
             const {google} = this.props;
             const maps = google.maps;
     
-            const mapRef = this.refs.map;
-            const node = ReactDOM.findDOMNode(mapRef);
-
             var uluru = {lat: 42.4706918, lng: -71.0628642};
-            const center = new maps.LatLng(42.4706918, -71.0628642);
             const mapConfig = Object.assign({}, {
                 zoom: 5,
                 center: uluru,

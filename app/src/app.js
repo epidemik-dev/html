@@ -18,16 +18,14 @@ class App extends Component {
         this.state = {
             login: 0
         }
+    }
 
+    componentDidMount() {
         login_is_valid((is_valid) => {
             if(is_valid === false) {
-                this.state = {
-                    login: 0
-                }
+                this.setState({login: 0})
             } else {
-                this.state = {
-                    login: 2
-                }
+                this.setState({login: 2})
             }
         })
     }

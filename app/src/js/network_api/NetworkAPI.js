@@ -2,7 +2,7 @@
 var main_url = "http://localhost:3000"
 var version_extension = "?version=1.0"
 
-export class NetworkAPI {
+export default class NetworkAPI {
 
     // String String (String -> Void) (Error -> Void) -> Void
     // Logs this user into the server
@@ -19,22 +19,23 @@ export class NetworkAPI {
     // Calls the callback when done with the auth token (or failure)
     static network_create_an_account(username, password, latitude, longitude, dob, gender, sucess, failure) {
         var URL = main_url + "/users" + version_extension
+        var body = JSON.stringify({
+            username: username,
+            password: password,
+            latitude: latitude,
+            longitude: longitude,
+            gender: gender,
+            date_of_birth: dob,
+            deviceID: null
+        })
         fetch(URL, {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-                latitude: latitude,
-                longitude: longitude,
-                gender: gender,
-                date_of_birth: dob,
-                deviceID: null
-            })
-        }).then(response => response.json().then(result => sucess(result))).catch(failure)
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: body
+            }).then(sucess).catch(failure)
     }
 
     // String String (Boolean -> Void) (Error -> Void) -> Void
@@ -96,24 +97,22 @@ export class NetworkAPI {
     static network_load_diagnosis(auth_token, sucess, failure) {
         var URL = main_url + "/diseases/symptoms" + version_extension +
             "&auth_token=" + auth_token
-        fetch().then(response => response.json().then(result => sucess(result))).catch(failure)
+        fetch(URL).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
     // String (Number Number -> Void) (Void -> Void) -> Void
     //Function to covert address to Latitude and Longitude
     static network_get_location(address, sucess, failure) {
-        let geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({
-            'address': address 
-        }, function (results, status) {
-            if (status === "OK") {
-                var latitude = results[0].geometry.location.lat();
-                var longitude = results[0].geometry.location.lng();
-                sucess(latitude, longitude);
-            } else {
-                failure();
-            }
-        });
+        address = address.replace(/ /g, "+")
+        let url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=AIzaSyAQDNSjsR5fSbsRwOOoPLMLRL1_WsEoUtY"
+        fetch(url).then(json => {
+            return json.json()
+        }).then(result => {
+            let lat_long = result.results[0].geometry.location
+            sucess(lat_long.lat, lat_long.lng)
+        }).catch(error => {
+            failure();
+        })
     };
 
 }
