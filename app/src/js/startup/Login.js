@@ -55,11 +55,15 @@ export class LoginPage extends React.Component {
       const username = document.getElementsByName("uname")[0].value
       const password = document.getElementsByName("psw")[0].value
       NetworkAPI.network_login(username, password, (auth_token) => {
-        console.log(auth_token)
-        localStorage["auth_token"] = auth_token
+        if(auth_token === "Not authorized") {
+          document.getElementsByName("uname")[0].value = "Invalid username/password"
+          return
+        }
+        localStorage.setItem("username", username)
+        localStorage.setItem("auth_token", auth_token)
+        console.log(localStorage.getItem("username"))
         cur.turnToMain();
       }, (error) => {
-        console.log(error, "error");
         document.getElementsByName("uname")[0].value = "Invalid username/password"
       })
     }

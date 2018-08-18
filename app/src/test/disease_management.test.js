@@ -1,26 +1,23 @@
+import DiseaseManager from "../js/map/DiseaseManager"
+
 const chai = require("chai");
 var expect = chai.expect;
 
-/*
-var manager = new DiseaseBranch(-180, 180, -360, 360);
 
-manager = addDisease(manager, 1, 1);
-manager = addDisease(manager, 2, 3);
-manager = addDisease(manager, 100, 1);
-manager = addDisease(manager, -10, 20);
-manager = addDisease(manager, -10, 50);
-manager = addDisease(manager, 20, -100);
-manager = addDisease(manager, 0, 0);
-*/
+var manager = new DiseaseManager(-180, 180, -360, 360);
+
+manager.addDisease(1, 1);
+manager.addDisease(2, 3);
+manager.addDisease(100, 1);
+manager.addDisease(-10, 20);
+manager.addDisease(-10, 50);
+manager.addDisease(20, -100);
+manager.addDisease(0, 0);
 
 
 it("should return the proper results", () => {
-    expect(1).to.be.equal(1)
+    expect(manager.getAll()).to.be.equal(7)
+    expect(manager.getWeightForRange(-1000, 1000, -1000, 1000)).to.be.equal(7)
+    expect(manager.getWeightForRange(-0.1, 10, -0.1, 10)).to.be.equal(3)
+    expect(manager.getWeightForRange(-10, 10, -0.1, 40)).to.be.equal(4)
 })
-/*
-expect(getAll(manager), 7, "Get every disease");
-
-expect(getWeightForRange(manager, -1000, 1000, -1000, 1000), 7, "Get every disease by range");
-expect(getWeightForRange(manager, -0.1, 10, -0.1, 10), 3, "Get every disease by range");
-expect(getWeightForRange(manager, -10, 10, -0.1, 40), 4, "Get every disease by range");
-*/

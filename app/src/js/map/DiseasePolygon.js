@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-class DiseasePolygon {
+export default class DiseasePolygon {
    // The data structure that stores the data for one
    // Overlay on the map
     

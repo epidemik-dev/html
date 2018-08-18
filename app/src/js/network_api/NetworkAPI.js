@@ -61,9 +61,9 @@ export default class NetworkAPI {
         }).then(response => response.json().then(result => sucess(result))).catch(failure)
     }
 
-    // String ([List-of Disease] -> Void) (Error -> Void) -> Void
+    // String -> Promise(List-of Disease])
     // Returns a list of every disease in the system
-    static network_get_all_diseases(auth_token, sucess, failure) {
+    static network_get_all_diseases(auth_token) {
         var region = {
             lat_min: -600,
             lat_max: 600,
@@ -71,7 +71,7 @@ export default class NetworkAPI {
             long_max: 600
         }
         var URL = main_url + "/diseases" + version_extension + "&auth_token=" + auth_token + "&region=" + JSON.stringify(region)
-        fetch(URL).then(response => response.json().then(result => sucess(result))).catch(failure);
+        return fetch(URL).then(response => response.json())
     }
 
     // String String ([List-of Disease] -> Void) (Error -> Void) -> Void

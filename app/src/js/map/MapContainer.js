@@ -29,6 +29,7 @@ export class MapContainer extends Component {
             <Map google={this.props.google} />
           </div>
           <button style={button_style} id={button_id} onClick={button_func}>{button_text}</button>
+          <button style={button_style} id="log_out" onClick={this.props.turnToLogin}>Log Out</button>
         </div>
       )
   }

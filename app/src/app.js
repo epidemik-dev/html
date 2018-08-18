@@ -34,11 +34,20 @@ class App extends Component {
         if(this.state.login === 0) {
             return (<LoginPage switchToCreate={this.turnToCreate()} turnToMain = {this.turnToMain()}></LoginPage>);
         } else if(this.state.login === 1) {
-            return (<CreatePage turnToMain = {this.turnToMain()}></CreatePage>);
+            return (<CreatePage turnToLogin = {this.turnToLogin()} turnToMain = {this.turnToMain()}></CreatePage>);
         } else if(this.state.login === 2) {
-            return (<MapContainer></MapContainer>);
+            return (<MapContainer turnToLogin = {this.turnToLogin()}></MapContainer>);
         } else {
             return (<LoginPage switchToCreate={this.turnToCreate()} turnToMain = {this.turnToMain()}></LoginPage>);
+        }
+    }
+
+    turnToLogin() {
+        localStorage['username'] = undefined
+        localStorage['token'] = undefined
+        var view = this;
+        return function() {
+            view.setState({login: 0});
         }
     }
 
